@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { AlbumsModule } from './albums/albums.module'
 
 @Module({
   imports: [
@@ -20,9 +19,12 @@ import { AppService } from './app.service'
       username: process.env.USERNAME,
       password: process.env.PASSWORD,
       database: 'indistreet',
+      autoLoadEntities: true,
+      logging: ['query'],
     }),
+    AlbumsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
