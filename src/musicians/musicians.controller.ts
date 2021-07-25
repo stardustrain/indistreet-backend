@@ -1,8 +1,10 @@
-import { Controller, Param, Query, Get } from '@nestjs/common'
+import { Controller, Param, Query, Get, UseInterceptors } from '@nestjs/common'
 
 import { MusiciansService } from './musicians.service'
 
 import { FindallMusicianDto } from './dto/findall-musician.dto'
+
+import { NotFoundInterceptor } from '../common/interseptors/not-found-interceptor'
 
 @Controller('musicians')
 export class MusiciansController {
@@ -14,6 +16,7 @@ export class MusiciansController {
   }
 
   @Get('/:id')
+  @UseInterceptors(NotFoundInterceptor)
   findOne(@Param('id') id: number) {
     return this.musiciansService.findOne(id)
   }
