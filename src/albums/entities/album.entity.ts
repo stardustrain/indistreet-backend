@@ -1,9 +1,24 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
+export enum AlbumTypeEnum {
+  SINGLE = 'single',
+  EP = 'ep',
+  MINI_ALBUM = 'miniAlbum',
+  FULL_ALBUM = 'fullAlbum',
+  OST = 'ost'
+}
+
 @Entity()
 export class Album {
   @PrimaryGeneratedColumn()
   id: number
+
+  @Column({
+    type: 'enum',
+    enum: AlbumTypeEnum,
+    nullable: true
+  })
+  albumType: AlbumTypeEnum
 
   @Column()
   buyLink: string
