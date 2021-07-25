@@ -11,13 +11,13 @@ const parsedConfig = config({
 const insertAlbums = async () => {
   const connection = await createConnection({
     type: 'postgres',
-    host: parsedConfig.HOST,
+    host: parsedConfig?.HOST,
     port:
-      typeof parsedConfig.PORT === 'string'
-        ? parseInt(parsedConfig.PORT)
-        : parsedConfig.PORT,
-    username: parsedConfig.USERNAME,
-    password: parsedConfig.PASSWORD,
+      typeof parsedConfig?.PORT === 'string'
+        ? parseInt(parsedConfig?.PORT)
+        : parsedConfig?.PORT,
+    username: parsedConfig?.USERNAME,
+    password: parsedConfig?.PASSWORD,
     database: 'indistreet',
     entities: [Album],
   })
@@ -26,6 +26,7 @@ const insertAlbums = async () => {
     const albums = dummy.map((album) => {
       const newAlbum = new Album()
       Object.entries(album).forEach(([key, value]) => {
+        // @ts-ignore
         newAlbum[key] = value
       })
       return newAlbum
