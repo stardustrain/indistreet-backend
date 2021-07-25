@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
 
 import { AlbumsModule } from './albums/albums.module'
+import { MusiciansModule } from './musicians/musicians.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AlbumsModule } from './albums/albums.module'
       logging: ['query'],
     }),
     AlbumsModule,
+    MusiciansModule,
   ],
   controllers: [],
   providers: [],

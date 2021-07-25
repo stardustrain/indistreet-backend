@@ -1,11 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+
+import { Musician } from '../../musicians/entities/musician.entity'
 
 export enum AlbumTypeEnum {
   SINGLE = 'single',
   EP = 'ep',
   MINI_ALBUM = 'miniAlbum',
   FULL_ALBUM = 'fullAlbum',
-  OST = 'ost'
+  OST = 'ost',
+  UNKNOWN = 'unknown',
 }
 
 @Entity()
@@ -16,9 +19,12 @@ export class Album {
   @Column({
     type: 'enum',
     enum: AlbumTypeEnum,
-    nullable: true
+    default: AlbumTypeEnum.UNKNOWN,
   })
   albumType: AlbumTypeEnum
+
+  @ManyToOne(() => Musician, (musician) => musician.albums)
+  musician: Musician
 
   @Column()
   buyLink: string

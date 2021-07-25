@@ -24,7 +24,6 @@ export class AlbumsService {
     }
 
     return this.albumRepository.findAndCount({
-      select: ['id'],
       skip: (page - 1) * DEFAULT_PAGE_SIZE,
       take: DEFAULT_PAGE_SIZE,
       where,
