@@ -1,9 +1,13 @@
+const parsedConfig = require('dotenv').config({
+  path: '.env'
+}).parsed
+
 module.exports = {
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'indistreet',
-  password: 'pass123',
+  host: parsedConfig.HOST,
+  port: parsedConfig.PORT,
+  username: parsedConfig.USERNAME,
+  password: parsedConfig.PASSWORD,
   database: 'indistreet',
   entities: ['src/**/entities/*.ts'],
   migrations: ['src/migrations/*.ts'],
