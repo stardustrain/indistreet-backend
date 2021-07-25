@@ -1,18 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 
 import { Album } from '../../albums/entities/album.entity'
+import { Person } from '../../persons/entities/person.entity'
 
 @Entity()
 export class Musician {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column()
   bio: string
 
   @Column()
   isSolo: boolean
 
-  // members
+  @OneToMany(() => Person, (person) => person.musician)
+  members: Person[]
 
   @OneToMany(() => Album, (album) => album.musician)
   albums: Album[]

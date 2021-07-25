@@ -1,5 +1,5 @@
 const parsedConfig = require('dotenv').config({
-  path: '.env'
+  path: '.env',
 }).parsed
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
   username: parsedConfig.USERNAME,
   password: parsedConfig.PASSWORD,
   database: 'indistreet',
-  entities: ['src/**/entities/*.ts'],
+  entities: ['src/**/entities/*.entity.ts'],
   migrations: ['src/migrations/*.ts'],
   cli: {
     migrationsDir: 'src/migrations',
