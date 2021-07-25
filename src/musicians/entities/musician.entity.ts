@@ -1,7 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm'
 
 import { Album } from '../../albums/entities/album.entity'
 import { Person } from '../../persons/entities/person.entity'
+import { Genre } from '../../genres/entities/genre.entity'
 
 @Entity()
 export class Musician {
@@ -24,7 +32,9 @@ export class Musician {
 
   // lives
 
-  // genres
+  @ManyToMany(() => Genre)
+  @JoinTable()
+  genres: Genre[]
 
   // videos
 

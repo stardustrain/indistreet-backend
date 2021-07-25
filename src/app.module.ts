@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AlbumsModule } from './albums/albums.module'
 import { MusiciansModule } from './musicians/musicians.module'
 import { PersonsModule } from './persons/persons.module'
+import { GenresModule } from './genres/genres.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PersonsModule } from './persons/persons.module'
     AlbumsModule,
     MusiciansModule,
     PersonsModule,
+    GenresModule,
   ],
   controllers: [],
   providers: [],
