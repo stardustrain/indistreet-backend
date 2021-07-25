@@ -11,5 +11,5 @@ export class Genre {
   name: string
 
   @ManyToMany(() => Musician)
-  misicians: Musician[]
+  musicians: Musician[]
 }
