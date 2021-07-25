@@ -6,6 +6,7 @@ import { AlbumsModule } from './albums/albums.module'
 import { MusiciansModule } from './musicians/musicians.module'
 import { PersonsModule } from './persons/persons.module'
 import { GenresModule } from './genres/genres.module';
+import { SongsModule } from './songs/songs.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { GenresModule } from './genres/genres.module';
     MusiciansModule,
     PersonsModule,
     GenresModule,
+    SongsModule,
   ],
   controllers: [],
   providers: [],

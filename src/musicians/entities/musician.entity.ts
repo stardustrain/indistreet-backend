@@ -10,6 +10,7 @@ import {
 import { Album } from '../../albums/entities/album.entity'
 import { Person } from '../../persons/entities/person.entity'
 import { Genre } from '../../genres/entities/genre.entity'
+import { Song } from '../../songs/entities/song.entity'
 
 @Entity()
 export class Musician {
@@ -71,7 +72,8 @@ export class Musician {
   @Column()
   nameJp: string
 
-  // songs:
+  @OneToMany(() => Song, (song) => song.musician)
+  songs: Song[]
 
   @Column()
   isRemoved: boolean

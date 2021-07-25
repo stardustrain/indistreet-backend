@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
 
 import { Musician } from '../../musicians/entities/musician.entity'
+import { Song } from '../../songs/entities/song.entity'
 
 export enum AlbumTypeEnum {
   SINGLE = 'single',
@@ -55,4 +62,9 @@ export class Album {
 
   @Column('date')
   releaseDate: Date
+
+  @OneToMany(() => Song, (song) => song.album, {
+    cascade: true,
+  })
+  songs: Song[]
 }
