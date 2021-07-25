@@ -8,7 +8,9 @@ export class Musician {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   bio: string
 
   @Column()
