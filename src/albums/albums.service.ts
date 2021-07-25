@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { Album } from './entities/album.entity'
+
 import { FindallAlbumDto } from './dto/findall-album.dto'
 
-import type { FindManyOptions } from 'typeorm'
+import { getPaginationOption } from '../utils/pagination'
 
-const DEFAULT_PAGE_SIZE = 20
+import type { FindManyOptions } from 'typeorm'
 
 @Injectable()
 export class AlbumsService {
@@ -16,16 +17,18 @@ export class AlbumsService {
     private readonly albumRepository: Repository<Album>,
   ) {}
 
-  findAll({ page = 1, removed }: FindallAlbumDto) {
+  findAll({ page, removed }: FindallAlbumDto) {
     const where: FindManyOptions<Album>['where'] = {}
 
     if (typeof removed !== 'undefined') {
-      where['isremoved'] = removed
+      where['isRemoved'] = removed
     }
 
+    const { skip, take } = getPaginationOption(page)
+
     return this.albumRepository.findAndCount({
-      skip: (page - 1) * DEFAULT_PAGE_SIZE,
-      take: DEFAULT_PAGE_SIZE,
+      skip,
+      take,
       where,
     })
   }

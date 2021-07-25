@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
 
 import { AlbumsModule } from './albums/albums.module'
-import { MusiciansModule } from './musicians/musicians.module';
+import { MusiciansModule } from './musicians/musicians.module'
 
 @Module({
   imports: [
