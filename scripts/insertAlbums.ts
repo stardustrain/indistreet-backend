@@ -24,11 +24,7 @@ const insertAlbums = async () => {
 
   try {
     const albums = dummy.map((album) => {
-      const newAlbum = new Album()
-      Object.entries(album).forEach(([key, value]) => {
-        // @ts-ignore
-        newAlbum[key] = value
-      })
+      const newAlbum = connection.getRepository(Album).create(album)
       return newAlbum
     })
 
