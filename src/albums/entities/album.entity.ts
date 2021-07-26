@@ -24,6 +24,11 @@ export class Album {
   id: number
 
   @Column({
+    nullable: true,
+  })
+  title: string
+
+  @Column({
     type: 'enum',
     enum: AlbumTypeEnum,
     default: AlbumTypeEnum.UNKNOWN,
