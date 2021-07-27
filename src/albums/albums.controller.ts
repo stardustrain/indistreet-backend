@@ -1,11 +1,12 @@
 import { Controller, Get, Query, Param, UseInterceptors } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 
 import { AlbumsService } from './albums.service'
-
 import { FindallAlbumDto } from './dto/findall-album.dto'
 
 import { NotFoundInterceptor } from '../common/interseptors/not-found-interceptor'
 
+@ApiTags('Albums')
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
