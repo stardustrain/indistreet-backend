@@ -7,6 +7,7 @@ import { MusiciansModule } from './musicians/musicians.module'
 import { PersonsModule } from './persons/persons.module'
 import { GenresModule } from './genres/genres.module';
 import { SongsModule } from './songs/songs.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SongsModule } from './songs/songs.module';
     PersonsModule,
     GenresModule,
     SongsModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
