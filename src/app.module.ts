@@ -5,14 +5,16 @@ import { ConfigModule } from '@nestjs/config'
 import { AlbumsModule } from './albums/albums.module'
 import { MusiciansModule } from './musicians/musicians.module'
 import { PersonsModule } from './persons/persons.module'
-import { GenresModule } from './genres/genres.module';
-import { SongsModule } from './songs/songs.module';
-import { ProductsModule } from './products/products.module';
+import { GenresModule } from './genres/genres.module'
+import { SongsModule } from './songs/songs.module'
+import { ProductsModule } from './products/products.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -33,6 +35,7 @@ import { ProductsModule } from './products/products.module';
     GenresModule,
     SongsModule,
     ProductsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
