@@ -9,6 +9,7 @@ import { GenresModule } from './genres/genres.module'
 import { SongsModule } from './songs/songs.module'
 import { ProductsModule } from './products/products.module'
 import { UsersModule } from './users/users.module'
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module'
     SongsModule,
     ProductsModule,
     UsersModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [],

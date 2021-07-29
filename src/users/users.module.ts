@@ -9,6 +9,7 @@ import { User } from './entities/user.entity'
 import { UsersController } from './users.controller'
 import { LocalStrategy } from './strategies/local.strategy'
 import { JwtStrategy } from './strategies/jwt.strategy'
+import { CaslModule } from '../casl/casl.module'
 
 @Module({
   imports: [
@@ -19,10 +20,11 @@ import { JwtStrategy } from './strategies/jwt.strategy'
       useFactory: (config: ConfigService) => ({
         secret: config.get('JWT_SECRET'),
         signOptions: {
-          expiresIn: '5m',
+          expiresIn: '5d',
         },
       }),
     }),
+    CaslModule,
   ],
   providers: [UsersService, LocalStrategy, JwtStrategy],
   exports: [],

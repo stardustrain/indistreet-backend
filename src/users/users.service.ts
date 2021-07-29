@@ -1,10 +1,17 @@
-import { Injectable } from '@nestjs/common'
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcrypt'
+import { omit } from 'ramda'
 
 import { User } from './entities/user.entity'
 import { UserCreateDto } from './dto/user-create.dto'
+import { UserUpdateDto } from './dto/user-update.dto'
+import { CaslAbilityFactory, Action } from '../casl/casl-ability.factory'
 
 import type { Repository } from 'typeorm'
 import type { ValidatedUser } from './strategies/local.strategy'
@@ -19,6 +26,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
   generatePayload = (user: ValidatedUser) => ({
@@ -31,9 +39,10 @@ export class UsersService {
   }
 
   async create(userDto: UserCreateDto) {
-    const user = new User()
-    user.username = userDto.username
-    user.password = await hash(userDto.password, SALT_ROUND)
+    const { password, ...restUserFields } = omit(['passwordConfirm'], userDto)
+
+    const user = this.userRepository.create(restUserFields)
+    user.password = await hash(password, SALT_ROUND)
     return this.userRepository.save(user)
   }
 
@@ -42,5 +51,23 @@ export class UsersService {
     return {
       access_token: this.jwtService.sign(payload),
     }
+  }
+
+  async update(jwtPayload: JwtPayload, userUpdateDto: UserUpdateDto) {
+    const user = await this.userRepository.findOne(jwtPayload.sub, {
+      select: ['id'],
+    })
+    if (!user) {
+      throw new BadRequestException()
+    }
+    const ability = this.caslAbilityFactory.createForUser(user)
+
+    if (!ability.can(Action.Update, user)) {
+      throw new ForbiddenException()
+    }
+
+    const updatedUesr = await this.userRepository.update(user.id, userUpdateDto)
+
+    return updatedUesr
   }
 }

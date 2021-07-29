@@ -20,6 +20,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard'
 import { JwtGuard } from './guards/jwt.guard'
 
 import type { FastifyRequestWithAuthGuard } from 'fastify'
+import type { JwtPayload } from './users.service'
 
 @ApiTags('Users')
 @Controller('users')
@@ -48,9 +49,9 @@ export class UsersController {
   @UseGuards(JwtGuard)
   @Patch('profile')
   update(
-    @Req() req: FastifyRequestWithAuthGuard,
+    @Req() req: { user: JwtPayload },
     @Body() userUpdateDto: UserUpdateDto,
   ) {
-    // TODO: Add update user profile after add to some field to user entity
+    return this.userService.update(req.user, userUpdateDto)
   }
 }

@@ -8,6 +8,7 @@
   "scripts": {
     "insert:dummy": "ts-node ./scripts/index.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "typeorm:sync": "sh -c 'yarn typeorm migration:generate -n ${0} && yarn typeorm migration:run'",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -23,6 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@casl/ability": "^5.3.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.0.0",
     "@nestjs/core": "^8.0.0",

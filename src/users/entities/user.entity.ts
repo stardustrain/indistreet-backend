@@ -1,4 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+  MUSICIAN = 'musician',
+}
+
+export enum UserLanguage {
+  EN = 'en',
+  KO = 'ko',
+}
 
 @Entity()
 export class User {
@@ -12,4 +29,29 @@ export class User {
 
   @Column()
   password: string
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole
+
+  @Column({
+    type: 'enum',
+    enum: UserLanguage,
+    nullable: true,
+  })
+  language: UserLanguage
+
+  @Column({
+    nullable: true,
+  })
+  birthday: Date
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
