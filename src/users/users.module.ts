@@ -10,6 +10,7 @@ import { UsersController } from './users.controller'
 import { LocalStrategy } from './strategies/local.strategy'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { CaslModule } from '../casl/casl.module'
+import { TokenModule } from '../token/token.module'
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CaslModule } from '../casl/casl.module'
       }),
     }),
     CaslModule,
+    TokenModule,
   ],
   providers: [UsersService, LocalStrategy, JwtStrategy],
   exports: [],

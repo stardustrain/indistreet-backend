@@ -18,6 +18,9 @@ import { UserUpdateDto } from './dto/user-update.dto'
 
 import { LocalAuthGuard } from './guards/local-auth.guard'
 import { JwtGuard } from './guards/jwt.guard'
+import { PoliciesGuard } from '../common/guards/policies.guard'
+import CheckPolicies from '../common/decorators/CheckPolicies'
+import { UpdateUserPolicyHandler } from './policies/update-user.policy'
 
 import type { FastifyRequestWithAuthGuard } from 'fastify'
 import type { JwtPayload } from './users.service'
@@ -29,10 +32,10 @@ export class UsersController {
 
   @ApiBody({ type: UserLoginDto })
   @UseGuards(LocalAuthGuard)
-  @Post('signin')
+  @Post('login')
   @HttpCode(200)
   signin(@Req() req: FastifyRequestWithAuthGuard) {
-    return this.userService.signin(req.user)
+    return this.userService.login(req.user)
   }
 
   @Post('signup')
@@ -46,12 +49,20 @@ export class UsersController {
     return req.user
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PoliciesGuard)
+  @CheckPolicies(new UpdateUserPolicyHandler())
   @Patch('profile')
   update(
     @Req() req: { user: JwtPayload },
     @Body() userUpdateDto: UserUpdateDto,
   ) {
     return this.userService.update(req.user, userUpdateDto)
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('logout')
+  @HttpCode(204)
+  logout(@Req() req: { user: JwtPayload }) {
+    return this.userService.logout(req.user)
   }
 }

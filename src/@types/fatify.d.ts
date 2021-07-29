@@ -1,7 +1,8 @@
-declare module 'fastify' {
-  import { User } from '../users/entities/user.entity'
+import { FastifyRequest } from 'fastify'
+import type { ValidatedUser } from '../users/strategies/local.strategy'
 
-  type FastifyRequestWithAuthGuard = import('fastify').FastifyRequest & {
-    user: User
+declare module 'fastify' {
+  type FastifyRequestWithAuthGuard = FastifyRequest & {
+    user: ValidatedUser
   }
 }

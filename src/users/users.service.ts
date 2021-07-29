@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  BadRequestException,
-  ForbiddenException,
-} from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
+import { Injectable, BadRequestException } from '@nestjs/common'
+import { InjectRepository, InjectConnection } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcrypt'
 import { omit } from 'ramda'
@@ -11,9 +7,10 @@ import { omit } from 'ramda'
 import { User } from './entities/user.entity'
 import { UserCreateDto } from './dto/user-create.dto'
 import { UserUpdateDto } from './dto/user-update.dto'
-import { CaslAbilityFactory, Action } from '../casl/casl-ability.factory'
+import { TokenService } from '../token/token.service'
+import { Token } from '../token/entities/token.entity'
 
-import type { Repository } from 'typeorm'
+import type { Repository, Connection } from 'typeorm'
 import type { ValidatedUser } from './strategies/local.strategy'
 
 export type JwtPayload = ReturnType<UsersService['generatePayload']>
@@ -26,7 +23,9 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private readonly caslAbilityFactory: CaslAbilityFactory,
+    private readonly tokenService: TokenService,
+    @InjectConnection()
+    private readonly connection: Connection,
   ) {}
 
   generatePayload = (user: ValidatedUser) => ({
@@ -43,13 +42,52 @@ export class UsersService {
 
     const user = this.userRepository.create(restUserFields)
     user.password = await hash(password, SALT_ROUND)
-    return this.userRepository.save(user)
+    const savedUser = await this.userRepository.save(user)
+
+    return this.login(savedUser)
   }
 
-  signin(user: ValidatedUser) {
-    const payload = this.generatePayload(user)
-    return {
-      access_token: this.jwtService.sign(payload),
+  async login(validatedUser: ValidatedUser) {
+    const payload = this.generatePayload(validatedUser)
+    const token = this.jwtService.sign(payload)
+
+    const queryRunner = this.connection.createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
+
+    try {
+      // Remove existing token
+      const user = await queryRunner.manager.findOne(User, validatedUser.id, {
+        select: ['id'],
+        relations: ['token'],
+      })
+
+      if (!user) {
+        throw new BadRequestException()
+      }
+
+      if (user.token) {
+        await queryRunner.manager.remove(user.token)
+      }
+
+      // Create new token
+      const tokenEntity = queryRunner.manager.create(Token, {
+        token,
+      })
+      const createdToken = await queryRunner.manager.save(tokenEntity)
+      await queryRunner.manager.update(User, user.id, {
+        token: createdToken,
+      })
+
+      await queryRunner.commitTransaction()
+
+      return {
+        accessToken: createdToken.token,
+      }
+    } catch (e) {
+      await queryRunner.rollbackTransaction()
+    } finally {
+      await queryRunner.release()
     }
   }
 
@@ -60,14 +98,13 @@ export class UsersService {
     if (!user) {
       throw new BadRequestException()
     }
-    const ability = this.caslAbilityFactory.createForUser(user)
 
-    if (!ability.can(Action.Update, user)) {
-      throw new ForbiddenException()
-    }
-
-    const updatedUesr = await this.userRepository.update(user.id, userUpdateDto)
+    const updatedUesr = await this.userRepository.save(userUpdateDto, {})
 
     return updatedUesr
+  }
+
+  async logout(jwtPayload: JwtPayload) {
+    return this.tokenService.remove(jwtPayload.sub)
   }
 }

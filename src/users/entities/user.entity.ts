@@ -4,7 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm'
+
+import { Token } from '../../token/entities/token.entity'
 
 export enum UserRole {
   USER = 'user',
@@ -54,4 +58,10 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date
+
+  @OneToOne(() => Token, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  token: Token
 }

@@ -8,7 +8,7 @@ import { UserRole } from '../users/entities/user.entity'
 import type { ExtractSubjectType, InferSubjects } from '@casl/ability'
 
 type Subjects = InferSubjects<typeof User | typeof Musician> | 'all'
-type AppAbility = Ability<[Action, Subjects]>
+export type AppAbility = Ability<[Action, Subjects]>
 
 export enum Action {
   Manage = 'manage',
