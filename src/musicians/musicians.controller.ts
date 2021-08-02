@@ -40,7 +40,6 @@ export class MusiciansController {
   @CheckPolicies(new CreateMusicianPolicyHandler())
   @Post()
   create(@Body() body: CreateMusicianDto) {
-    console.log(body)
     return this.musiciansService.create(body)
   }
 }
