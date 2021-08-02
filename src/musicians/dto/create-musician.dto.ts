@@ -16,15 +16,15 @@ export class CreateMusicianDto {
 
   @Type(() => String)
   @IsOptional()
-  nameEn: string
+  nameEn?: string
 
   @Type(() => String)
   @IsOptional()
-  nameJp: string
+  nameJp?: string
 
   @Type(() => String)
   @IsOptional()
-  bio: string
+  bio?: string
 
   @Type(() => Boolean)
   @IsBoolean()
@@ -39,7 +39,7 @@ export class CreateMusicianDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  albums: CreateAlbumDto[]
+  albums?: CreateAlbumDto[]
 
   // @ManyToMany(() => Genre, {
   //   cascade: true,
@@ -49,39 +49,39 @@ export class CreateMusicianDto {
 
   @Type(() => String)
   @IsOptional()
-  instagramLink: string
+  instagramLink?: string
 
   @Type(() => String)
   @IsOptional()
-  twitterLink: string
+  twitterLink?: string
 
   @Type(() => String)
   @IsOptional()
-  spotifyLink: string
+  spotifyLink?: string
 
   @Type(() => String)
   @IsOptional()
-  appleMusicLink: string
+  appleMusicLink?: string
 
   @Type(() => String)
   @IsOptional()
-  melonLink: string
+  melonLink?: string
 
   @Type(() => String)
   @IsOptional()
-  soundcloudLink: string
+  soundcloudLink?: string
 
   @Type(() => String)
   @IsOptional()
-  facebookLink: string
+  facebookLink?: string
 
   @Type(() => String)
   @IsOptional()
-  bandcampLink: string
+  bandcampLink?: string
 
   @Type(() => String)
   @IsOptional()
-  youtubeChannelLink: string
+  youtubeChannelLink?: string
 
   // @OneToMany(() => Song, (song) => song.musician, {
   //   cascade: true,
@@ -91,7 +91,7 @@ export class CreateMusicianDto {
 
   @Type(() => Boolean)
   @IsOptional()
-  isRemoved: boolean
+  isRemoved?: boolean
 
   // @OneToMany(() => Product, (product) => product.musician, {
   //   cascade: true,

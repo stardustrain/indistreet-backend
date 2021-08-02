@@ -25,44 +25,44 @@ export class CreateAlbumDto {
 
   @Type(() => String)
   @IsOptional()
-  buyLink: string
+  buyLink?: string
 
   @Type(() => String)
   @IsOptional()
-  melonLink: string
+  melonLink?: string
 
   @Type(() => String)
   @IsOptional()
-  vibeLink: string
+  vibeLink?: string
 
   @Type(() => String)
   @IsOptional()
-  bugsLink: string
+  bugsLink?: string
 
   @Type(() => String)
   @IsOptional()
-  spotifyLink: string
+  spotifyLink?: string
 
   @Type(() => String)
   @IsOptional()
-  youtubeMusicLink: string
+  youtubeMusicLink?: string
 
   @Type(() => String)
   @IsOptional()
-  appleMusicLink: string
+  appleMusicLink?: string
 
   @Type(() => String)
   @IsOptional()
-  description: string
+  description?: string
 
   @Type(() => Boolean)
   @IsOptional()
   @Default(false)
-  isRemoved: boolean
+  isRemoved?: boolean
 
   @Type(() => Date)
   @IsOptional()
-  releaseDate: Date
+  releaseDate?: Date
 
   // @OneToMany(() => Song, (song) => song.album, {
   //   cascade: true,
