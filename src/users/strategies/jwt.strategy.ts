@@ -4,6 +4,9 @@ import { ConfigService } from '@nestjs/config'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
 import type { JwtPayload } from '../users.service'
+import type { PromiseReturnType } from '../../utils/typeUtility'
+
+export type ValidateJwt = PromiseReturnType<JwtStrategy['validate']>
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +19,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    console.log('jwt')
     return {
       id: payload.sub,
       username: payload.username,

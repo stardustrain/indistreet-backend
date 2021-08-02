@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  ForbiddenException,
+} from '@nestjs/common'
 import { InjectRepository, InjectConnection } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcrypt'
@@ -12,6 +16,7 @@ import { Token } from '../token/entities/token.entity'
 
 import type { Repository, Connection } from 'typeorm'
 import type { ValidatedUser } from './strategies/local.strategy'
+import type { ValidateJwt } from './strategies/jwt.strategy'
 
 export type JwtPayload = ReturnType<UsersService['generatePayload']>
 
@@ -63,7 +68,7 @@ export class UsersService {
       })
 
       if (!user) {
-        throw new BadRequestException()
+        throw new ForbiddenException()
       }
 
       if (user.token) {
@@ -75,9 +80,14 @@ export class UsersService {
         token,
       })
       const createdToken = await queryRunner.manager.save(tokenEntity)
-      await queryRunner.manager.update(User, user.id, {
-        token: createdToken,
-      })
+      user.token = createdToken
+      const updatedUser = await queryRunner.manager.preload(User, user)
+
+      if (!updatedUser) {
+        throw new InternalServerErrorException()
+      }
+
+      await queryRunner.manager.update(User, updatedUser.id, updatedUser)
 
       await queryRunner.commitTransaction()
 
@@ -91,20 +101,21 @@ export class UsersService {
     }
   }
 
-  async update(jwtPayload: JwtPayload, userUpdateDto: UserUpdateDto) {
-    const user = await this.userRepository.findOne(jwtPayload.sub, {
-      select: ['id'],
+  async update(jwtPayload: ValidateJwt, userUpdateDto: UserUpdateDto) {
+    const updatedUser = await this.userRepository.preload({
+      id: jwtPayload.id,
+      ...userUpdateDto,
     })
-    if (!user) {
-      throw new BadRequestException()
+
+    if (!updatedUser) {
+      throw new ForbiddenException()
     }
 
-    const updatedUesr = await this.userRepository.save(userUpdateDto, {})
-
-    return updatedUesr
+    await this.userRepository.update(updatedUser.id, updatedUser)
+    return updatedUser
   }
 
-  async logout(jwtPayload: JwtPayload) {
-    return this.tokenService.remove(jwtPayload.sub)
+  async logout(jwtPayload: ValidateJwt) {
+    return this.tokenService.remove(jwtPayload.id)
   }
 }

@@ -23,7 +23,7 @@ import CheckPolicies from '../common/decorators/CheckPolicies'
 import { UpdateUserPolicyHandler } from './policies/update-user.policy'
 
 import type { FastifyRequestWithAuthGuard } from 'fastify'
-import type { JwtPayload } from './users.service'
+import type { ValidateJwt } from './strategies/jwt.strategy'
 
 @ApiTags('Users')
 @Controller('users')
@@ -39,8 +39,8 @@ export class UsersController {
   }
 
   @Post('signup')
-  create(@Body() userCreateDto: UserCreateDto) {
-    return this.userService.create(userCreateDto)
+  create(@Body() body: UserCreateDto) {
+    return this.userService.create(body)
   }
 
   @UseGuards(JwtGuard)
@@ -52,17 +52,14 @@ export class UsersController {
   @UseGuards(JwtGuard, PoliciesGuard)
   @CheckPolicies(new UpdateUserPolicyHandler())
   @Patch('profile')
-  update(
-    @Req() req: { user: JwtPayload },
-    @Body() userUpdateDto: UserUpdateDto,
-  ) {
-    return this.userService.update(req.user, userUpdateDto)
+  update(@Req() req: { user: ValidateJwt }, @Body() body: UserUpdateDto) {
+    return this.userService.update(req.user, body)
   }
 
   @UseGuards(JwtGuard)
   @Post('logout')
   @HttpCode(204)
-  logout(@Req() req: { user: JwtPayload }) {
+  logout(@Req() req: { user: ValidateJwt }) {
     return this.userService.logout(req.user)
   }
 }
