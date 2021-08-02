@@ -23,9 +23,7 @@ export class Album {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    nullable: true,
-  })
+  @Column()
   title: string
 
   @Column({
@@ -38,34 +36,54 @@ export class Album {
   @ManyToOne(() => Musician, (musician) => musician.albums)
   musician: Musician
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   buyLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   melonLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   vibeLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   bugsLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   spotifyLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   youtubeMusicLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   appleMusicLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   description: string
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isRemoved: boolean
 
-  @Column('date')
+  @Column('date', {
+    nullable: true,
+  })
   releaseDate: Date
 
   @OneToMany(() => Song, (song) => song.album, {

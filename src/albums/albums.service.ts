@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { InjectRepository, InjectConnection } from '@nestjs/typeorm'
+import { Repository, Connection } from 'typeorm'
 
 import { Album } from './entities/album.entity'
+import { Musician } from '../musicians/entities/musician.entity'
 
 import { FindallAlbumDto } from './dto/findall-album.dto'
+import { CreateAlbumDto } from './dto/create-album.dto'
 
 import { getPaginationOption } from '../utils/pagination'
 
@@ -15,6 +17,8 @@ export class AlbumsService {
   constructor(
     @InjectRepository(Album)
     private readonly albumRepository: Repository<Album>,
+    @InjectConnection()
+    private readonly connection: Connection,
   ) {}
 
   findAll({ page, removed }: FindallAlbumDto) {
@@ -35,5 +39,26 @@ export class AlbumsService {
 
   findOne(id: number) {
     return this.albumRepository.findOne(id)
+  }
+
+  async create(body: CreateAlbumDto) {
+    const queryRunner = this.connection.createQueryRunner()
+
+    await queryRunner.connect()
+
+    const musician = await queryRunner.manager.findOneOrFail(
+      Musician,
+      body.musicianId,
+      {
+        select: ['id'],
+      },
+    )
+
+    const album = this.albumRepository.create({
+      ...body,
+      musician,
+    })
+
+    return this.albumRepository.save(album)
   }
 }
