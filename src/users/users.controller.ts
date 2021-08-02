@@ -17,7 +17,7 @@ import { UserCreateDto } from './dto/user-create.dto'
 import { UserUpdateDto } from './dto/user-update.dto'
 
 import { LocalAuthGuard } from './guards/local-auth.guard'
-import { JwtGuard } from './guards/jwt.guard'
+import { JwtGuard } from '../common/guards/jwt.guard'
 import { PoliciesGuard } from '../common/guards/policies.guard'
 import CheckPolicies from '../common/decorators/CheckPolicies'
 import { UpdateUserPolicyHandler } from './policies/update-user.policy'

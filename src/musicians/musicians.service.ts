@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Musician } from './entities/musician.entity'
 
 import { FindallMusicianDto } from './dto/findall-musician.dto'
+import { CreateMusicianDto } from './dto/create-musician.dto'
 
 import { getPaginationOption } from '../utils/pagination'
 
@@ -34,5 +35,10 @@ export class MusiciansService {
     return this.musicianRepository.findOne(id, {
       relations: ['albums', 'songs', 'members', 'genres', 'products'],
     })
+  }
+
+  create(body: CreateMusicianDto) {
+    const musician = this.musicianRepository.create(body)
+    return this.musicianRepository.save(musician)
   }
 }

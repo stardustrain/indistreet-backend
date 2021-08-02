@@ -36,6 +36,7 @@ export class UsersService {
   generatePayload = (user: ValidatedUser) => ({
     username: user.username,
     sub: user.id,
+    role: user.role,
   })
 
   findByUsername(username: string) {

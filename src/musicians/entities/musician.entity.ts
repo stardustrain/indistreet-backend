@@ -18,6 +18,19 @@ export class Musician {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column()
+  name: string
+
+  @Column({
+    nullable: true,
+  })
+  nameEn: string
+
+  @Column({
+    nullable: true,
+  })
+  nameJp: string
+
   @Column({
     nullable: true,
   })
@@ -26,60 +39,84 @@ export class Musician {
   @Column()
   isSolo: boolean
 
-  @OneToMany(() => Person, (person) => person.musician)
+  @OneToMany(() => Person, (person) => person.musician, {
+    cascade: true,
+  })
   members: Person[]
 
-  @OneToMany(() => Album, (album) => album.musician)
+  @OneToMany(() => Album, (album) => album.musician, {
+    cascade: true,
+  })
   albums: Album[]
 
   // lives
 
-  @ManyToMany(() => Genre)
+  @ManyToMany(() => Genre, {
+    cascade: true,
+  })
   @JoinTable()
   genres: Genre[]
 
   // videos
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   instagramLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   twitterLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   spotifyLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   appleMusicLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   melonLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   soundcloudLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   facebookLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   bandcampLink: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   youtubeChannelLink: string
 
-  @Column()
-  nameEn: string
-
-  @Column()
-  nameJp: string
-
-  @OneToMany(() => Song, (song) => song.musician)
+  @OneToMany(() => Song, (song) => song.musician, {
+    cascade: true,
+  })
   songs: Song[]
 
-  @Column()
+  @Column({
+    default: false,
+  })
   isRemoved: boolean
 
-  @OneToMany(() => Product, (product) => product.musician)
+  @OneToMany(() => Product, (product) => product.musician, {
+    cascade: true,
+  })
   products: Product[]
 
   // festival_item_time_tables:
