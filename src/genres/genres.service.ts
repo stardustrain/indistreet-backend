@@ -25,7 +25,7 @@ export class GenresService {
     })
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.genreRepository.findOne(id)
   }
 }

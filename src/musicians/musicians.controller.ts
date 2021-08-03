@@ -7,6 +7,7 @@ import {
   Post,
   UseInterceptors,
   UseGuards,
+  Req,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
@@ -19,6 +20,8 @@ import { JwtGuard } from '../common/guards/jwt.guard'
 import { PoliciesGuard } from '../common/guards/policies.guard'
 import CheckPolicies from 'src/common/decorators/CheckPolicies'
 import { CreateMusicianPolicyHandler } from './policies/create-musician.policy'
+
+import type { ValidateJwt } from '../users/strategies/jwt.strategy'
 
 @ApiTags('Musicians')
 @Controller('musicians')
@@ -39,7 +42,7 @@ export class MusiciansController {
   @UseGuards(JwtGuard, PoliciesGuard)
   @CheckPolicies(new CreateMusicianPolicyHandler())
   @Post()
-  create(@Body() body: CreateMusicianDto) {
-    return this.musiciansService.create(body)
+  create(@Body() body: CreateMusicianDto, @Req() req: { user: ValidateJwt }) {
+    return this.musiciansService.create(body, req)
   }
 }

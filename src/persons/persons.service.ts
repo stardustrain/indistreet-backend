@@ -25,7 +25,7 @@ export class PersonsService {
     })
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.personRepository.findOne(id)
   }
 }

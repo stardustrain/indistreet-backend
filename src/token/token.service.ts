@@ -19,16 +19,18 @@ export class TokenService {
     return this.tokenRepository.save(newToken)
   }
 
-  findOne(userId: number) {
+  findByUserId(userId: number) {
     return this.tokenRepository.findOne({
       where: {
-        userId,
+        user: {
+          id: userId,
+        },
       },
     })
   }
 
   async remove(userId: number) {
-    const token = await this.findOne(userId)
+    const token = await this.findByUserId(userId)
 
     if (!token) {
       throw new BadRequestException()

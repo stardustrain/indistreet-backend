@@ -6,15 +6,19 @@ import { Musician } from './entities/musician.entity'
 import { FindallMusicianDto } from './dto/findall-musician.dto'
 import { CreateMusicianDto } from './dto/create-musician.dto'
 
+import { UsersService } from '../users/users.service'
+
 import { getPaginationOption } from '../utils/pagination'
 
 import type { Repository } from 'typeorm'
+import type { ValidateJwt } from '../users/strategies/jwt.strategy'
 
 @Injectable()
 export class MusiciansService {
   constructor(
     @InjectRepository(Musician)
     private readonly musicianRepository: Repository<Musician>,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll({ page }: FindallMusicianDto) {
@@ -37,8 +41,8 @@ export class MusiciansService {
     })
   }
 
-  create(body: CreateMusicianDto) {
+  async create(body: CreateMusicianDto, req: { user: ValidateJwt }) {
     const musician = this.musicianRepository.create(body)
-    return this.musicianRepository.save(musician)
+    return this.usersService.update(req.user, { musician: musician })
   }
 }

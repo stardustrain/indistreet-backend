@@ -5,6 +5,8 @@ import {
   IsOptional,
   IsNumber,
   IsPositive,
+  IsUrl,
+  IsDate,
 } from 'class-validator'
 import { AlbumTypeEnum } from '../entities/album.entity'
 import Default from '../../common/decorators/Default'
@@ -25,30 +27,37 @@ export class CreateAlbumDto {
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   buyLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   melonLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   vibeLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   bugsLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   spotifyLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   youtubeMusicLink?: string
 
   @Type(() => String)
   @IsOptional()
+  @IsUrl()
   appleMusicLink?: string
 
   @Type(() => String)
@@ -62,6 +71,7 @@ export class CreateAlbumDto {
 
   @Type(() => Date)
   @IsOptional()
+  @IsDate()
   releaseDate?: Date
 
   // @OneToMany(() => Song, (song) => song.album, {

@@ -7,4 +7,10 @@ export class PaginationDto {
   @IsPositive()
   @IsOptional()
   page?: number
+
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  @IsOptional()
+  pageSize?: number
 }

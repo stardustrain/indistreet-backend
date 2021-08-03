@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 
 import { Token } from '../../token/entities/token.entity'
+import { Musician } from '../../musicians/entities/musician.entity'
 
 export enum UserRole {
   USER = 'user',
@@ -59,9 +60,15 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToOne(() => Token, {
+  @OneToOne(() => Token, (token) => token.user, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   token: Token
+
+  @OneToOne(() => Musician, (musician) => musician.user, {
+    cascade: true,
+  })
+  @JoinColumn()
+  musician: Musician
 }

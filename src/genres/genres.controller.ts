@@ -19,7 +19,7 @@ export class GenresController {
 
   @Get('/:id')
   @UseInterceptors(NotFoundInterceptor)
-  findOne(@Param() id: number) {
+  findOne(@Param() { id }: { id: string }) {
     return this.genresService.findOne(id)
   }
 }

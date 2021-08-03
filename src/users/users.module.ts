@@ -29,7 +29,7 @@ import { TokenModule } from '../token/token.module'
     TokenModule,
   ],
   providers: [UsersService, LocalStrategy, JwtStrategy],
-  exports: [],
+  exports: [UsersService],
   controllers: [UsersController],
 })
 export class UsersModule {}

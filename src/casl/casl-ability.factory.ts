@@ -35,11 +35,11 @@ export class CaslAbilityFactory {
       can(Action.Create, [Album, Musician])
       can([Action.Update, Action.Delete], Album, {
         musician: {
-          id: user.id,
+          id: user.musicianId,
         },
       })
       can([Action.Update, Action.Delete], Musician, {
-        id: user.id,
+        id: user.musicianId,
       })
     }
 

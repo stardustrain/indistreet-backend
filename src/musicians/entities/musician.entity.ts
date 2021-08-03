@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  OneToOne,
 } from 'typeorm'
 
 import { Album } from '../../albums/entities/album.entity'
@@ -12,6 +13,7 @@ import { Person } from '../../persons/entities/person.entity'
 import { Genre } from '../../genres/entities/genre.entity'
 import { Song } from '../../songs/entities/song.entity'
 import { Product } from '../../products/entities/product.entity'
+import { User } from '../../users/entities/user.entity'
 
 @Entity()
 export class Musician {
@@ -120,4 +122,7 @@ export class Musician {
   products: Product[]
 
   // festival_item_time_tables:
+
+  @OneToOne(() => User, (user) => user.musician)
+  user: User
 }

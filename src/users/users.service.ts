@@ -37,6 +37,7 @@ export class UsersService {
     username: user.username,
     sub: user.id,
     role: user.role,
+    musicianId: user.musician.id,
   })
 
   findByUsername(username: string) {
@@ -72,15 +73,12 @@ export class UsersService {
         throw new ForbiddenException()
       }
 
-      if (user.token) {
-        await queryRunner.manager.remove(user.token)
-      }
-
       // Create new token
       const tokenEntity = queryRunner.manager.create(Token, {
         token,
       })
       const createdToken = await queryRunner.manager.save(tokenEntity)
+      const currentToken = user.token
       user.token = createdToken
       const updatedUser = await queryRunner.manager.preload(User, user)
 
@@ -88,7 +86,10 @@ export class UsersService {
         throw new InternalServerErrorException()
       }
 
-      await queryRunner.manager.update(User, updatedUser.id, updatedUser)
+      await queryRunner.manager.save(updatedUser)
+      if (currentToken) {
+        await queryRunner.manager.remove(currentToken)
+      }
 
       await queryRunner.commitTransaction()
 
@@ -112,11 +113,24 @@ export class UsersService {
       throw new ForbiddenException()
     }
 
-    await this.userRepository.update(updatedUser.id, updatedUser)
+    await this.userRepository.save(updatedUser)
     return updatedUser
   }
 
   async logout(jwtPayload: ValidateJwt) {
     return this.tokenService.remove(jwtPayload.id)
+  }
+
+  async getUserToken(userId: number) {
+    const user = await this.userRepository.findOneOrFail(userId, {
+      select: ['id', 'token'],
+      relations: ['token'],
+    })
+
+    return user.token
+  }
+
+  findOne(userId: number) {
+    return this.userRepository.findOneOrFail(userId)
   }
 }

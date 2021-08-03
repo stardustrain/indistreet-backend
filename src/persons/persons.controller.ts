@@ -19,7 +19,7 @@ export class PersonsController {
 
   @Get('/:id')
   @UseInterceptors(NotFoundInterceptor)
-  findOne(@Param() id: number) {
+  findOne(@Param() { id }: { id: string }) {
     return this.personService.findOne(id)
   }
 }
